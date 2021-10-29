@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import io.github.lizhangqu.coreprogress.ProgressHelper;
-import io.github.lizhangqu.coreprogress.ProgressUIListener;
+//import io.github.lizhangqu.coreprogress.ProgressHelper;
+//import io.github.lizhangqu.coreprogress.ProgressUIListener;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -71,7 +71,7 @@ public class Kitchen {
 
     public static Response currentResponse ;
 
-    public Kitchen() {}
+   // public Kitchen() {}
 
 
     /**
@@ -83,68 +83,68 @@ public class Kitchen {
      * @param <HTTP>
      * @return
      */
-    private static <HTTP> HTTP arange(Class<HTTP> clazz, String... passedUrl) {
-        Kitchen.currentResponse = null ;
-        if(retroMaps == null) {
-            throw new NullPointerException("RETROFIT == null");
-        } else if(prodUrl == null && passedUrl == null) {
-            throw new NullPointerException("URL == null");
-        } else if(passedUrl != null && passedUrl.length > 0) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
-                    .connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
-            if(AlfaLibsApplication.DEBUG){
-                httpClient.addInterceptor(logging);
-            }
-            if(Kitchen.usingHttps){
-                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
-                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
-                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2)
-                        .cipherSuites(
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
-                        .build();
-                httpClient.connectionSpecs(Collections.singletonList(spec));
-            }
-
-            if(headerMap!=null && headerMap.size()>0){
-                CustomInterceptor interceptor = new CustomInterceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request.Builder request = chain.request().newBuilder();
-                        Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
-                        while (iterator.hasNext()){
-                            Map.Entry<String, String> next = iterator.next();
-                            request.addHeader(next.getKey(), next.getValue());
-                        }
-                        Kitchen.currentResponse = chain.proceed(request.build());
-                        return Kitchen.currentResponse;
-                    }
-                };
-                httpClient.addInterceptor(interceptor);
-            }
-            if(Kitchen.progressUIListener!=null){
-                Interceptor progressInterceptor = chain -> {
-                    Request request = chain.request();
-                    ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
-                    Kitchen.currentResponse = chain.proceed(request);
-                    return Kitchen.currentResponse ;
-                };
-                httpClient.addInterceptor(progressInterceptor);
-            }
-            Kitchen.passedUrl = passedUrl[0];
-            retroMaps.put(Kitchen.passedUrl, (new Retrofit.Builder()).baseUrl(
-                    Kitchen.passedUrl).client(httpClient.build())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build());
-            return ((Retrofit)retroMaps.get(Kitchen.passedUrl)).create(clazz);
-        } else {
-            return ((Retrofit)retroMaps.get(Kitchen.prodUrl)).create(clazz);
-        }
-    }
+//    private static <HTTP> HTTP arange(Class<HTTP> clazz, String... passedUrl) {
+//        Kitchen.currentResponse = null ;
+//        if(retroMaps == null) {
+//            throw new NullPointerException("RETROFIT == null");
+//        } else if(prodUrl == null && passedUrl == null) {
+//            throw new NullPointerException("URL == null");
+//        } else if(passedUrl != null && passedUrl.length > 0) {
+//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+//                    .connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
+//            if(AlfaLibsApplication.DEBUG){
+//                httpClient.addInterceptor(logging);
+//            }
+//            if(Kitchen.usingHttps){
+//                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
+//                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+//                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+//                        .tlsVersions(TlsVersion.TLS_1_2)
+//                        .cipherSuites(
+//                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+//                        .build();
+//                httpClient.connectionSpecs(Collections.singletonList(spec));
+//            }
+//
+//            if(headerMap!=null && headerMap.size()>0){
+//                CustomInterceptor interceptor = new CustomInterceptor() {
+//                    @Override
+//                    public Response intercept(Chain chain) throws IOException {
+//                        Request.Builder request = chain.request().newBuilder();
+//                        Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
+//                        while (iterator.hasNext()){
+//                            Map.Entry<String, String> next = iterator.next();
+//                            request.addHeader(next.getKey(), next.getValue());
+//                        }
+//                        Kitchen.currentResponse = chain.proceed(request.build());
+//                        return Kitchen.currentResponse;
+//                    }
+//                };
+//                httpClient.addInterceptor(interceptor);
+//            }
+//            if(Kitchen.progressUIListener!=null){
+//                Interceptor progressInterceptor = chain -> {
+//                    Request request = chain.request();
+//                    //ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
+//                    Kitchen.currentResponse = chain.proceed(request);
+//                    return Kitchen.currentResponse ;
+//                };
+//                httpClient.addInterceptor(progressInterceptor);
+//            }
+//            Kitchen.passedUrl = passedUrl[0];
+//            retroMaps.put(Kitchen.passedUrl, (new Retrofit.Builder()).baseUrl(
+//                    Kitchen.passedUrl).client(httpClient.build())
+//                    .addConverterFactory(GsonConverterFactory.create(gson))
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                    .build());
+//            return ((Retrofit)retroMaps.get(Kitchen.passedUrl)).create(clazz);
+//        } else {
+//            return ((Retrofit)retroMaps.get(Kitchen.prodUrl)).create(clazz);
+//        }
+//    }
 
     /**
      * This method created for actual request http, this request will sink base url which you defined on previous initialization using kitchen.preparation(...)
@@ -155,195 +155,195 @@ public class Kitchen {
      * @param <HTTP>
      * @return
      */
-    public static <HTTP> HTTP arange(Context context, Class<HTTP> clazz, String... passedUrl) {
-        Kitchen.currentResponse = null ;
-        if(retroMaps == null) {
-            throw new NullPointerException("RETROFIT == null");
-        } else if(prodUrl == null && passedUrl == null) {
-            throw new NullPointerException("URL == null");
-        } else if(passedUrl != null && passedUrl.length > 0) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder().connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
-            if(AlfaLibsApplication.DEBUG){
-                httpClient.addInterceptor(logging);
-            }
-            if(Kitchen.usingHttps){
-                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
-                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
-                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2)
-                        .cipherSuites(
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
-                        .build();
-                httpClient.connectionSpecs(Collections.singletonList(spec));
-            }
+//    public static <HTTP> HTTP arange(Context context, Class<HTTP> clazz, String... passedUrl) {
+//        Kitchen.currentResponse = null ;
+//        if(retroMaps == null) {
+//            throw new NullPointerException("RETROFIT == null");
+//        } else if(prodUrl == null && passedUrl == null) {
+//            throw new NullPointerException("URL == null");
+//        } else if(passedUrl != null && passedUrl.length > 0) {
+//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            OkHttpClient.Builder httpClient = new OkHttpClient.Builder().connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
+//            if(AlfaLibsApplication.DEBUG){
+//                httpClient.addInterceptor(logging);
+//            }
+//            if(Kitchen.usingHttps){
+//                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
+//                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+//                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+//                        .tlsVersions(TlsVersion.TLS_1_2)
+//                        .cipherSuites(
+//                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+//                        .build();
+//                httpClient.connectionSpecs(Collections.singletonList(spec));
+//            }
+//
+//            if(headerMap!=null && headerMap.size()>0){
+//                Interceptor interceptor = chain -> {
+//                    Request.Builder request = chain.request().newBuilder();
+//                    Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
+//                    while (iterator.hasNext()){
+//                        Map.Entry<String, String> next = iterator.next();
+//                        request.addHeader(next.getKey(), next.getValue());
+//                    }
+//                    Kitchen.currentResponse = chain.proceed(request.build());
+//                    return Kitchen.currentResponse;
+//                };
+//                httpClient.addInterceptor(interceptor);
+//            }
+//            if(Kitchen.progressUIListener!=null){
+//                Interceptor progressInterceptor = chain -> {
+//                    Request request = chain.request();
+//                    //ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
+//                    Kitchen.currentResponse = chain.proceed(request);
+//                    return Kitchen.currentResponse ;
+//                };
+//                httpClient.addInterceptor(progressInterceptor);
+//            }
+//            Kitchen.passedUrl = passedUrl[0];
+//            retroMaps.put(Kitchen.passedUrl, (new Retrofit.Builder()).baseUrl(
+//                    Kitchen.passedUrl).client(httpClient.build())
+//                    .addConverterFactory(GsonConverterFactory.create(gson))
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                    .build());
+//            return ((Retrofit)retroMaps.get(Kitchen.passedUrl)).create(clazz);
+//        } else {
+//            return ((Retrofit)retroMaps.get(Kitchen.prodUrl)).create(clazz);
+//        }
+//    }
 
-            if(headerMap!=null && headerMap.size()>0){
-                Interceptor interceptor = chain -> {
-                    Request.Builder request = chain.request().newBuilder();
-                    Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
-                    while (iterator.hasNext()){
-                        Map.Entry<String, String> next = iterator.next();
-                        request.addHeader(next.getKey(), next.getValue());
-                    }
-                    Kitchen.currentResponse = chain.proceed(request.build());
-                    return Kitchen.currentResponse;
-                };
-                httpClient.addInterceptor(interceptor);
-            }
-            if(Kitchen.progressUIListener!=null){
-                Interceptor progressInterceptor = chain -> {
-                    Request request = chain.request();
-                    ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
-                    Kitchen.currentResponse = chain.proceed(request);
-                    return Kitchen.currentResponse ;
-                };
-                httpClient.addInterceptor(progressInterceptor);
-            }
-            Kitchen.passedUrl = passedUrl[0];
-            retroMaps.put(Kitchen.passedUrl, (new Retrofit.Builder()).baseUrl(
-                    Kitchen.passedUrl).client(httpClient.build())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build());
-            return ((Retrofit)retroMaps.get(Kitchen.passedUrl)).create(clazz);
-        } else {
-            return ((Retrofit)retroMaps.get(Kitchen.prodUrl)).create(clazz);
-        }
-    }
-
-    public static <HTTP> HTTP arange(Context context, Class<HTTP> clazz, int kitchenMode, String... passedUrl) {
-        Kitchen.currentResponse = null ;
-        if(retroMaps == null) {
-            throw new NullPointerException("RETROFIT == null");
-        } else if(prodUrl == null && passedUrl == null) {
-            throw new NullPointerException("URL == null");
-        } else if(passedUrl != null && passedUrl.length > 0) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder().connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
-            if(AlfaLibsApplication.DEBUG){
-                httpClient.addInterceptor(logging);
-            }
-            if(Kitchen.usingHttps){
-                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
-                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
-                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2)
-                        .cipherSuites(
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
-                        .build();
-                httpClient.connectionSpecs(Collections.singletonList(spec));
-            }
-            if(headerMap!=null && headerMap.size()>0){
-                Interceptor interceptor = chain -> {
-                    Request.Builder request = chain.request().newBuilder();
-                    Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
-                    while (iterator.hasNext()){
-                        Map.Entry<String, String> next = iterator.next();
-                        request.addHeader(next.getKey(), next.getValue());
-                    }
-                    Kitchen.currentResponse = chain.proceed(request.build());
-                    return Kitchen.currentResponse;
-                };
-            }
-            if(Kitchen.progressUIListener!=null){
-                Interceptor progressInterceptor = chain -> {
-                    Request request = chain.request();
-                    ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
-                    Kitchen.currentResponse = chain.proceed(request);
-                    return Kitchen.currentResponse ;
-                };
-                httpClient.addInterceptor(progressInterceptor);
-            }
-            Kitchen.passedUrl = passedUrl[0];
-            retroMaps.put(Kitchen.passedUrl, (new Retrofit.Builder()).baseUrl(
-                    Kitchen.passedUrl).client(httpClient.build())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build());
-            return ((Retrofit)retroMaps.get(Kitchen.passedUrl)).create(clazz);
-        } else {
-            if(kitchenMode==MOCK_MODE){
-                return  mock(context, clazz);
-            }
-            return ((Retrofit) retroMaps.get(Kitchen.prodUrl)).create(clazz);
-        }
-    }
+//    public static <HTTP> HTTP arange(Context context, Class<HTTP> clazz, int kitchenMode, String... passedUrl) {
+//        Kitchen.currentResponse = null ;
+//        if(retroMaps == null) {
+//            throw new NullPointerException("RETROFIT == null");
+//        } else if(prodUrl == null && passedUrl == null) {
+//            throw new NullPointerException("URL == null");
+//        } else if(passedUrl != null && passedUrl.length > 0) {
+//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            OkHttpClient.Builder httpClient = new OkHttpClient.Builder().connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
+//            if(AlfaLibsApplication.DEBUG){
+//                httpClient.addInterceptor(logging);
+//            }
+//            if(Kitchen.usingHttps){
+//                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
+//                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+//                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+//                        .tlsVersions(TlsVersion.TLS_1_2)
+//                        .cipherSuites(
+//                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+//                        .build();
+//                httpClient.connectionSpecs(Collections.singletonList(spec));
+//            }
+//            if(headerMap!=null && headerMap.size()>0){
+//                Interceptor interceptor = chain -> {
+//                    Request.Builder request = chain.request().newBuilder();
+//                    Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
+//                    while (iterator.hasNext()){
+//                        Map.Entry<String, String> next = iterator.next();
+//                        request.addHeader(next.getKey(), next.getValue());
+//                    }
+//                    Kitchen.currentResponse = chain.proceed(request.build());
+//                    return Kitchen.currentResponse;
+//                };
+//            }
+//            if(Kitchen.progressUIListener!=null){
+//                Interceptor progressInterceptor = chain -> {
+//                    Request request = chain.request();
+//                    //ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
+//                    Kitchen.currentResponse = chain.proceed(request);
+//                    return Kitchen.currentResponse ;
+//                };
+//                httpClient.addInterceptor(progressInterceptor);
+//            }
+//            Kitchen.passedUrl = passedUrl[0];
+//            retroMaps.put(Kitchen.passedUrl, (new Retrofit.Builder()).baseUrl(
+//                    Kitchen.passedUrl).client(httpClient.build())
+//                    .addConverterFactory(GsonConverterFactory.create(gson))
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                    .build());
+//            return ((Retrofit)retroMaps.get(Kitchen.passedUrl)).create(clazz);
+//        } else {
+//            if(kitchenMode==MOCK_MODE){
+//                return  mock(context, clazz);
+//            }
+//            return ((Retrofit) retroMaps.get(Kitchen.prodUrl)).create(clazz);
+//        }
+//    }
 
     /**
      * This method especially created for mocking json only, put your file inside assets/api/
      * and define your service path user Class Service by example ExampleService.class
      *
-     * @param context
-     * @param clazz
-     * @param <HTTP>
-     * @return
-     */
-    private static <HTTP> HTTP mock(Context context, Class<HTTP> clazz) {
-        Kitchen.currentResponse = null ;
-        if(!retroMaps.containsKey(Initial.DOMAIN_MOCK)) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(new OkHttpMockInterceptor(context, 5))
-                    .connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
-            if(AlfaLibsApplication.DEBUG){
-                httpClient.addInterceptor(logging);
-            }
-            if(Kitchen.usingHttps){
-                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
-                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
-                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2)
-                        .cipherSuites(
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
-                        .build();
-                httpClient.connectionSpecs(Collections.singletonList(spec));
-            }
+//     * @param
+//     * @param clazz
+//     * @param <HTTP>
+//     * @return
+//     */
+//    private static <HTTP> HTTP mock(Context context, Class<HTTP> clazz) {
+//        Kitchen.currentResponse = null ;
+//        if(!retroMaps.containsKey(Initial.DOMAIN_MOCK)) {
+//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(new OkHttpMockInterceptor(context, 5))
+//                    .connectTimeout(conTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS).writeTimeout(writeTimeout, TimeUnit.SECONDS);
+//            if(AlfaLibsApplication.DEBUG){
+//                httpClient.addInterceptor(logging);
+//            }
+//            if(Kitchen.usingHttps){
+//                HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
+//                httpClient.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+//                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+//                        .tlsVersions(TlsVersion.TLS_1_2)
+//                        .cipherSuites(
+//                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+//                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+//                        .build();
+//                httpClient.connectionSpecs(Collections.singletonList(spec));
+//            }
+//
+//            if(headerMap!=null && headerMap.size()>0){
+//                Interceptor interceptor = new Interceptor() {
+//                    @Override
+//                    public Response intercept(Chain chain) throws IOException {
+//                        Request.Builder request = chain.request().newBuilder();
+//                        Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
+//                        while (iterator.hasNext()){
+//                            Map.Entry<String, String> next = iterator.next();
+//                            request.addHeader(next.getKey(), next.getValue());
+//                        }
+//                        Kitchen.currentResponse = chain.proceed(request.build());
+//                        return Kitchen.currentResponse;
+//                    }
+//                };
+//                httpClient.addInterceptor(interceptor);
+//            }
+//            if(Kitchen.progressUIListener!=null){
+//                Interceptor progressInterceptor = chain -> {
+//                    Request request = chain.request();
+//                    //ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
+//                    Kitchen.currentResponse = chain.proceed(request);
+//                    return Kitchen.currentResponse ;
+//                };
+//                httpClient.addInterceptor(progressInterceptor);
+//            }
+//            retroMaps.put(Initial.DOMAIN_MOCK,
+//                    new Retrofit.Builder().client(httpClient.build())
+////                            .addConverterFactory(ScalarsConverterFactory.spoon())
+//                            .addConverterFactory(GsonConverterFactory.create(gson))
+//                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                            .baseUrl(Initial.DOMAIN_MOCK)
+//                            .build());
+//        }
+//        return retroMaps.get(Initial.DOMAIN_MOCK).create(clazz);
+//    }
 
-            if(headerMap!=null && headerMap.size()>0){
-                Interceptor interceptor = new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request.Builder request = chain.request().newBuilder();
-                        Iterator<Map.Entry<String, String>> iterator = headerMap.entrySet().iterator();
-                        while (iterator.hasNext()){
-                            Map.Entry<String, String> next = iterator.next();
-                            request.addHeader(next.getKey(), next.getValue());
-                        }
-                        Kitchen.currentResponse = chain.proceed(request.build());
-                        return Kitchen.currentResponse;
-                    }
-                };
-                httpClient.addInterceptor(interceptor);
-            }
-            if(Kitchen.progressUIListener!=null){
-                Interceptor progressInterceptor = chain -> {
-                    Request request = chain.request();
-                    ProgressHelper.withProgress(request.body(), Kitchen.progressUIListener);
-                    Kitchen.currentResponse = chain.proceed(request);
-                    return Kitchen.currentResponse ;
-                };
-                httpClient.addInterceptor(progressInterceptor);
-            }
-            retroMaps.put(Initial.DOMAIN_MOCK,
-                    new Retrofit.Builder().client(httpClient.build())
-//                            .addConverterFactory(ScalarsConverterFactory.spoon())
-                            .addConverterFactory(GsonConverterFactory.create(gson))
-                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                            .baseUrl(Initial.DOMAIN_MOCK)
-                            .build());
-        }
-        return retroMaps.get(Initial.DOMAIN_MOCK).create(clazz);
-    }
-
-    private static <HTTP, F extends Fragment> HTTP mock(F fragment, Class<HTTP> clazz) {
-        return mock(fragment.getContext(), clazz);
-    }
+//    private static <HTTP, F extends Fragment> HTTP mock(F fragment, Class<HTTP> clazz) {
+//        return mock(fragment.getContext(), clazz);
+//    }
 
     private static <O extends Observable<?>> O with(final Observable<?> observable){
         return (O)observable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
@@ -406,12 +406,12 @@ public class Kitchen {
     }
 
 
-    static ProgressUIListener progressUIListener ;
-    public static Kitchen usePan(ProgressUIListener progressUIListener){
-        Kitchen kitchen = new Kitchen();
-        kitchen.progressUIListener = progressUIListener;
-        return  kitchen ;
-    }
+//    static ProgressUIListener progressUIListener ;
+//    public static Kitchen usePan(ProgressUIListener progressUIListener){
+//        Kitchen kitchen = new Kitchen();
+//        kitchen.progressUIListener = progressUIListener;
+//        return  kitchen ;
+//    }
 
     public <T> Disposable pour(Observable<T> observable){
         if(disposable!=null && !disposable.isDisposed()){

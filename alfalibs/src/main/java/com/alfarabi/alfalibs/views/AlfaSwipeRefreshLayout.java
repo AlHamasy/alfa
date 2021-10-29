@@ -236,6 +236,6 @@ public class AlfaSwipeRefreshLayout extends MaterialRefreshLayout implements Loa
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setNestedScrollingEnabled(true);
         }
-
     }
+
 }

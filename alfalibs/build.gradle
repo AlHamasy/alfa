@@ -90,9 +90,9 @@ dependencies {
     embed 'com.cjj.materialrefeshlayout:library:1.3.0'
     //embed 'com.github.markomilos:paginate:0.5.1'
     embed 'com.github.markomilos:paginate:1.0.0'
-    embed('io.github.lizhangqu:coreprogress:1.0.2', {
-        exclude group: 'io.reactivex.rxjava2', module: 'rxandroid'
-    })
+//    embed('io.github.lizhangqu:coreprogress:1.0.2', {
+//        exclude group: 'io.reactivex.rxjava2', module: 'rxandroid'
+//    })
     embed 'com.github.mirrajabi:okhttp-json-mock:1.1.1'
 
     embed 'com.squareup.okhttp3:logging-interceptor:3.12.0'
